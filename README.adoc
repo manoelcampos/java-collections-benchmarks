@@ -3,3 +3,13 @@
 Sample performance benchmarks for Java collections.
 
 It uses JDK 21 and https://openjdk.org/projects/code-tools/jmh/[JHM] for benchmarking.
+
+== Some benchmarks' result
+
+|===
+| **Benchmark**           |**Mode**|**Cnt**|**Score ± Error** | **Units**
+| arrayListMiddleRemoval  | avgt   | 25    | 0.026 ± 0.001    | s/op
+| linkedListMiddleRemoval | avgt   | 25    | 0.013 ± 0.001    | s/op
+| arrayListPopulation     | avgt   | 25    | 0.025 ± 0.001    | s/op
+| linkedListPopulation    | avgt   | 25    | 0.012 ± 0.001    | s/op
+|===
