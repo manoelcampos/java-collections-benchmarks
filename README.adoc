@@ -1,0 +1,5 @@
+= Java Collections Benchmarks
+
+Sample performance benchmarks for Java collections.
+
+It uses JDK 21 and https://openjdk.org/projects/code-tools/jmh/[JHM] for benchmarking.
