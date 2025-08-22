@@ -1,48 +1,52 @@
 package io.github.manoelcampos.benchmarks;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.*;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.concurrent.TimeUnit;
 
-import static io.github.manoelcampos.benchmarks.Util.LIST_SIZE;
 import static io.github.manoelcampos.benchmarks.Util.MIDDLE;
 
 /**
+ * Benchmarks to measure the performance operations of different
+ * {@link List} implementations.
+ *
  * @author Manoel Campos
  */
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@BenchmarkMode(Mode.AverageTime)
 public class ListsBenchmark {
-    public static final Supplier<List<String>> NEW_ARRAY_LIST_SUPPLIER = () -> new ArrayList<>(LIST_SIZE);
-
+    /**
+     * It doesn't use the {@link ListState} as a parameter
+     * because the goal is to measure the time to populate
+     * a given List implementation.
+     */
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
     public List<String> arrayListPopulation(){
-        return Util.populateNewList(NEW_ARRAY_LIST_SUPPLIER);
+        return Util.populateNewList(Util.NEW_ARRAY_LIST_SUPPLIER);
     }
 
+    /**
+     * It doesn't use the {@link ListState} as a parameter
+     * because the goal is to measure the time to populate
+     * a given List implementation.
+     */
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
     public List<String> linkedListPopulation(){
         return Util.populateNewList(LinkedList::new);
     }
 
+    /**
+     * Since there is an {@link Param} annotation
+     * for one of the {@link ListState} attributes,
+     * this benchmark will be executed
+     * once for each value of the {@link ListState#getListType()} parameterized attribute.
+     * @param state a State object containing the list implementation to be used in the benchmark
+     */
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    public List<String> arrayListMiddleRemoval(){
-        final var list = Util.populateNewList(NEW_ARRAY_LIST_SUPPLIER);
-        list.remove(MIDDLE);
-        return list;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    public List<String> linkedListMiddleRemoval(){
-        final var list = Util.populateNewList(LinkedList::new);
-        list.remove(MIDDLE);
-        return list;
+    public List<String> listMiddleRemoval(final ListState state){
+        state.getList().remove(MIDDLE);
+        return state.getList();
     }
 }
